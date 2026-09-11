@@ -95,7 +95,7 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/msm_hsusb/gadget/lun%d
 TW_CUSTOM_CPU_TEMP_PATH := "/sys/class/thermal/thermal_zone0/temp"
 TW_EXCLUDE_BASH := true
 TW_EXCLUDE_PYTHON := true
-
+TW_DEVICE_VERSION := 0_notnoelchannel
 # TWRP crypto support
 TW_INCLUDE_CRYPTO := true
 
