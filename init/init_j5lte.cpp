@@ -14,8 +14,8 @@
 * limitations under the License.
 */
 
-#include <android-base/strings.h>
-#include <android-base/properties.h>
+#include <string.h>
+#include <cutils/properties.h>
 
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
 #include <sys/_system_properties.h>
@@ -35,21 +35,22 @@ namespace android {
 
         void vendor_load_properties()
         {
-            std::string bootloader = android::base::GetProperty("ro.bootloader", "unknown");
+            char bootloader[PROPERTY_VALUE_MAX];
+            property_get("ro.bootloader", bootloader, "unknown");
 
-            if (bootloader.find("J500M") == 0) {
+            if (strncmp(bootloader, "J500M", 5) == 0) {
                 property_override("ro.product.model", "SM-J500M");
                 property_override("ro.vendor.product.model", "SM-J500M");
-            } else if (bootloader.find("J500G") == 0) {
+            } else if (strncmp(bootloader, "J500G", 5) == 0) {
                 property_override("ro.product.model", "SM-J500G");
                 property_override("ro.vendor.product.model", "SM-J500G");
-            } else if (bootloader.find("J500F") == 0) {
+            } else if (strncmp(bootloader, "J500F", 5) == 0) {
                 property_override("ro.product.model", "SM-J500F");
                 property_override("ro.vendor.product.model", "SM-J500F");
-            } else if (bootloader.find("J500Y") == 0) {
+            } else if (strncmp(bootloader, "J500Y", 5) == 0) {
                 property_override("ro.product.model", "SM-J500Y");
                 property_override("ro.vendor.product.model", "SM-J500Y");
-            } else if (bootloader.find("J500N0") == 0) {
+            } else if (strncmp(bootloader, "J500N0", 6) == 0) {
                 property_override("ro.product.model", "SM-J500N0");
                 property_override("ro.vendor.product.model", "SM-J500N0");
             }
