@@ -39,7 +39,7 @@ jobs:
         cd ~/TWRP
         mkdir ~/.bin
         curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
-        python3 ~/.bin/repo init --depth=1 -u https://github.com/a3lte-lineageos/platform_manifest_twrp_omni.git -b fox-8.1
+        python3 ~/.bin/repo init --depth=1 -u https://github.com/unlegacy-devices/fox-7.1_manifest.git -b fox-7.1
         git clone --branch android-8.1 --single-branch https://github.com/notnoelchannel2/android_device_samsung_j5lte.git ~/TWRP/device/samsung/j5lte
         git clone --branch lineage-15.1 --single-branch https://github.com/a3lte-lineageos/android_kernel_samsung_msm8916.git ~/TWRP/kernel/samsung/msm8916
         sudo git clone --depth 1 --branch android-6.0.1_r5 --single-branch https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/ /opt/toolchains/arm-linux-androideabi-4.9/
