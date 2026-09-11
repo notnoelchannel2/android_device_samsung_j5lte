@@ -1,0 +1,66 @@
+name: TWRP CI for SM-J330
+
+on:
+    workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+    - name: Installing JDK 7 + Build Dependencies
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository ppa:deadsnakes/ppa
+        sudo add-apt-repository universe
+        sudo apt-get update
+        sudo apt-get install -y bc bison build-essential ccache curl flex axel g++-multilib gcc-multilib git git-lfs gnupg gperf imagemagick protobuf-compiler python3-protobuf lib32readline-dev lib32z1-dev libdw-dev libelf-dev lz4 libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev
+        wget https://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2_amd64.deb && sudo dpkg -i libtinfo5_6.3-2_amd64.deb && rm -f libtinfo5_6.3-2_amd64.deb
+        wget https://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libncurses5_6.3-2_amd64.deb && sudo dpkg -i libncurses5_6.3-2_amd64.deb && rm -f libncurses5_6.3-2_amd64.deb
+        cd /usr/local/src
+        sudo wget https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz
+        sudo tar xvf Python-2.7.18.tgz
+        cd Python-2.7.18
+        sudo ./configure --enable-optimizations
+        sudo make altinstall
+        sudo ln -sf /usr/local/bin/python2.7 /usr/bin/python2
+        sudo ln -sf /usr/local/bin/python2.7 /usr/bin/python
+    - name: Install OpenJDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: 'zulu'
+        java-version: '8'
+    - name: Syncing TWRP sources
+      run: |
+        mkdir ~/TWRP
+        cd ~/TWRP
+        mkdir ~/.bin
+        curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
+        python3 ~/.bin/repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-8.1
+        git clone --branch android-8.1 --single-branch https://github.com/notnoelchannel2/android_device_samsung_j5lte.git ~/TWRP/device/samsung/j5lte
+        git clone --branch lineage-15.1 --single-branch https://github.com/a3lte-lineageos/android_kernel_samsung_msm8916.git ~/TWRP/kernel/samsung/msm8916
+        sudo git clone --depth 1 --branch android-6.0.1_r5 --single-branch https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/ /opt/toolchains/arm-linux-androideabi-4.9/
+        python3 ~/.bin/repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune -j$(nproc --all)
+    - name: Building TWRP
+      run: |
+        OLDPATH=$PATH
+        OLDJAVAHOME=$JAVA_HOME
+        export PATH="$HOME/.jdk_7/java-se-7u75-ri/bin:$PATH"
+        export JAVA_HOME="$HOME/.jdk_7/java-se-7u75-ri"
+        cd ~/TWRP
+        git clone https://github.com/LineageOS/android_system_tools_dtbtool.git system/tools/dtbtool
+        source build/envsetup.sh
+        export ALLOW_MISSING_DEPENDENCIES=true
+        export LC_ALL=C
+        lunch omni_j5lte-eng
+        make -j$(nproc --all) recoveryimage
+        export PATH=$OLDPATH
+        export JAVA_HOME=$OLDJAVAHOME
+    - name: Uploading TWRP builds
+      uses: actions/upload-artifact@v6
+      with:
+        name: twrp
+        path: /home/runner/TWRP/out/target/product/j5lte/recovery.*
