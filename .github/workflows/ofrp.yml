@@ -77,4 +77,4 @@ jobs:
       uses: actions/upload-artifact@v6
       with:
         name: twrp
-        path: /home/runner/TWRP/out/target/product/j5lte/recovery.*
+        path: /home/runner/TWRP/out/target/product/j5lte/*.zip
