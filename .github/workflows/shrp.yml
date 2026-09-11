@@ -51,7 +51,7 @@ jobs:
         export PATH="$HOME/.jdk_7/java-se-7u75-ri/bin:$PATH"
         export JAVA_HOME="$HOME/.jdk_7/java-se-7u75-ri"
         cd ~/TWRP
-        git clone https://github.com/LineageOS/android_system_tools_dtbtool.git system/tools/dtbtool
+        git clone https://github.com/TeamWin/android_device_qcom_common -b android-7.1 ~/TWRP/device/qcom/common
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
         export LC_ALL=C
