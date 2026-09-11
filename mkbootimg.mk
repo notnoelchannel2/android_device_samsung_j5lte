@@ -3,7 +3,14 @@
 LOCAL_PATH := $(call my-dir)
 
 KERNEL_OUT_TARGET := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ
-DTBTOOL := $(HOST_OUT_EXECUTABLES)/dtbToolLineage
+# Dynamically select dtbTool based on Android SDK version
+# Android 7.1 = SDK 25, Android 8.1 = SDK 27
+ifeq ($(PLATFORM_SDK_VERSION),25)
+    DTBTOOL := $(HOST_OUT_EXECUTABLES)/dtbTool
+else
+    DTBTOOL := $(HOST_OUT_EXECUTABLES)/dtbToolLineage
+endif
+
 DTS_OUT_TARGET := $(KERNEL_OUT_TARGET)/arch/$(TARGET_ARCH)/boot/dts/
 DTC_OUT_TARGET := $(KERNEL_OUT_TARGET)/scripts/dtc/
 INSTALLED_DTIMAGE_TARGET := $(PRODUCT_OUT)/dt.img
