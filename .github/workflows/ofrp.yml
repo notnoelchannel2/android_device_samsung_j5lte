@@ -1,4 +1,4 @@
-name: TWRP CI for SM-J500
+name: OFRP CI for SM-J500
 
 on:
     workflow_dispatch:
