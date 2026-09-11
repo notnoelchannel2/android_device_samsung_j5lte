@@ -43,6 +43,15 @@ namespace android {
             } else if (bootloader.find("J500G") == 0) {
                 property_override("ro.product.model", "SM-J500G");
                 property_override("ro.vendor.product.model", "SM-J500G");
+            } else if (bootloader.find("J500F") == 0) {
+                property_override("ro.product.model", "SM-J500F");
+                property_override("ro.vendor.product.model", "SM-J500F");
+            } else if (bootloader.find("J500Y") == 0) {
+                property_override("ro.product.model", "SM-J500Y");
+                property_override("ro.vendor.product.model", "SM-J500Y");
+            } else if (bootloader.find("J500N0") == 0) {
+                property_override("ro.product.model", "SM-J500N0");
+                property_override("ro.vendor.product.model", "SM-J500N0");
             }
         }
     }
