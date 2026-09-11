@@ -6,7 +6,7 @@ KERNEL_OUT_TARGET := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ
 # Dynamically select dtbTool based on Android SDK version
 # Android 7.1 = SDK 25, Android 8.1 = SDK 27
 ifeq ($(PLATFORM_SDK_VERSION),25)
-    DTBTOOL := $(HOST_OUT_EXECUTABLES)/dtbTool
+    DTBTOOL := $(HOST_OUT_EXECUTABLES)/dtbToolCM
 else
     DTBTOOL := $(HOST_OUT_EXECUTABLES)/dtbToolLineage
 endif
